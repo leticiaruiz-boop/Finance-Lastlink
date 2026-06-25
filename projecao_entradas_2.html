@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projeção de Entradas de Caixa</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#11161f; --navy:#1F3864; --navy2:#2E5496; --steel:#5B7194;
+    --paper:#fbfaf7; --card:#ffffff; --line:#e4e2db; --line2:#d3d0c7;
+    --base:#2E5496; --cons:#B45309; --otim:#0F7B6C; --real:#C0392B;
+    --good:#0F7B6C; --warn:#B45309; --muted:#6b7280;
+    --grid:#eceae3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 22px 80px}
+
+  header{border-bottom:2px solid var(--navy);padding-bottom:18px;margin-bottom:26px}
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel);font-weight:700}
+  h1{font-size:30px;font-weight:760;letter-spacing:-.02em;color:var(--navy);margin-top:6px}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px;max-width:680px}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0 30px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--navy2)}
+  .kpi.k-cons::before{background:var(--cons)} .kpi.k-otim::before{background:var(--otim)} .kpi.k-acc::before{background:var(--good)}
+  .kpi .lab{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .kpi .val{font-size:26px;font-weight:740;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+  .kpi .note{font-size:12px;color:var(--muted);margin-top:3px}
+
+  .grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:start}
+  section.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:22px}
+  .panel h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--navy);font-weight:760;
+    margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .panel h2 .num{font-size:11px;color:#fff;background:var(--navy);width:20px;height:20px;border-radius:5px;
+    display:inline-flex;align-items:center;justify-content:center;font-weight:700}
+  .panel .desc{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+  .scard{border:1px solid var(--line);border-radius:11px;padding:15px 16px;background:#fff}
+  .scard.cons{border-top:3px solid var(--cons)} .scard.base{border-top:3px solid var(--base)} .scard.otim{border-top:3px solid var(--otim)}
+  .scard .nm{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .scard .big{font-size:23px;font-weight:760;letter-spacing:-.02em;margin:7px 0 2px;font-variant-numeric:tabular-nums}
+  .scard.cons .big{color:var(--cons)} .scard.base .big{color:var(--base)} .scard.otim .big{color:var(--otim)}
+  .scard .br{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;padding:3px 0;border-top:1px dashed var(--line);margin-top:8px}
+  .scard .br b{font-weight:650;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th{text-align:right;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+    font-weight:700;padding:9px 10px;border-bottom:2px solid var(--line2);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  td{padding:8px 10px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+  tr.fut{background:#fcfbf4}
+  tr.fut td:first-child{font-weight:700;color:var(--navy)}
+  td input{width:108px;border:1px solid var(--line2);border-radius:7px;padding:6px 8px;font-size:13px;
+    text-align:right;font-variant-numeric:tabular-nums;font-family:inherit;background:#fffdf2}
+  td input:focus{outline:2px solid var(--navy2);outline-offset:0;border-color:transparent;background:#fff}
+  .addrow{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{font-family:inherit;font-size:13px;font-weight:650;border-radius:8px;cursor:pointer;border:1px solid var(--navy);
+    background:var(--navy);color:#fff;padding:8px 15px;transition:.15s}
+  button:hover{background:var(--navy2)}
+  button.ghost{background:#fff;color:var(--navy)}
+  button.ghost:hover{background:#f1f3f7}
+  .err-pos{color:var(--good)} .err-neg{color:var(--real)}
+
+  .chartbox{position:relative;height:300px}
+  .chartbox.sm{height:230px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+  .params{display:grid;grid-template-columns:1fr auto;gap:8px 14px;font-size:13px;align-items:center}
+  .params label{color:var(--muted)}
+  .params input{width:84px;border:1px solid var(--line2);border-radius:7px;padding:5px 8px;text-align:right;font-family:inherit;font-variant-numeric:tabular-nums}
+  .foot{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .note-box{background:#f7f6f1;border:1px solid var(--line);border-left:3px solid var(--navy2);border-radius:8px;padding:13px 15px;font-size:12.5px;color:#444;margin-top:6px}
+  @media(max-width:920px){.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.scn{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Operações Financeiras &middot; Fluxo de Caixa</div>
+    <h1>Projeção de Entradas de Caixa</h1>
+    <p class="sub">Informe a receita bruta esperada de cada mês. O modelo deduz chargeback, separa MDR e Serviços Financeiros e projeta a entrada de caixa em três cenários &mdash; reproduzindo a lógica da planilha.</p>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section class="panel">
+    <h2><span class="num">1</span>Projeção do próximo mês</h2>
+    <p class="desc">Cenários para o mês projetado mais recente (sem realizado).</p>
+    <div class="scn" id="scnCards"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <h2><span class="num">2</span>Evolução mensal</h2>
+      <p class="desc">Realizado vs. projeção base, com banda conservador&ndash;otimista.</p>
+      <div class="chartbox"><canvas id="chartMain"></canvas></div>
+      <div class="legend">
+        <span><i style="background:#C0392B"></i>Realizado</span>
+        <span><i style="background:#2E5496"></i>Base</span>
+        <span><i style="background:#9aa7bd"></i>Banda (cons.&ndash;otim.)</span>
+      </div>
+    </section>
+    <section class="panel">
+      <h2><span class="num">3</span>Aderência da projeção</h2>
+      <p class="desc">Erro % do cenário base contra o realizado, por mês.</p>
+      <div class="chartbox sm"><canvas id="chartErr"></canvas></div>
+      <div class="note-box" id="adherNote"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2><span class="num">4</span>Tabela detalhada &middot; edite a receita bruta</h2>
+    <p class="desc">Linhas em destaque são meses futuros (sem realizado). Edite qualquer receita bruta &mdash; tudo recalcula na hora.</p>
+    <div style="overflow-x:auto">
+    <table id="tbl">
+      <thead><tr>
+        <th>Mês</th><th>Receita Bruta</th><th>Líquida</th><th>MDR</th><th>Serv. Fin.</th>
+        <th>Conservador</th><th>Base</th><th>Otimista</th><th>Realizado</th><th>Erro % base</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    </div>
+    <div class="addrow">
+      <button id="addBtn">+ Adicionar mês futuro</button>
+      <button class="ghost" id="resetBtn">Restaurar dados originais</button>
+      <span class="foot" id="rowFoot"></span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><span class="num">5</span>Parâmetros do modelo</h2>
+    <p class="desc">Fatores calibrados pelo histórico (média dos últimos 3 meses). Ajuste para simular cenários alternativos.</p>
+    <div class="grid2">
+      <div class="params">
+        <label>Taxa chargeback + reembolso</label><input id="p_tx" type="number" step="0.001">
+        <label>Fator MDR (sobre líquida)</label><input id="p_fmdr" type="number" step="0.001">
+        <label>Fator Serv. Financeiros (sobre líquida)</label><input id="p_fsf" type="number" step="0.001">
+        <label>Banda de cenário MDR (&plusmn;)</label><input id="p_bmdr" type="number" step="0.01">
+        <label>Banda de cenário SF (&plusmn;)</label><input id="p_bsf" type="number" step="0.01">
+      </div>
+      <div class="note-box">
+        <b>Como o cálculo funciona</b><br>
+        Líquida = Bruta &times; (1 &minus; taxa chargeback)<br>
+        MDR = Líquida &times; fator MDR &nbsp;&middot;&nbsp; Serv. Fin. = Líquida &times; fator SF<br>
+        Conservador = MDR&times;(1&minus;banda) + SF&times;(1&minus;banda)<br>
+        Otimista = MDR&times;(1+banda) + SF&times;(1+banda)<br>
+        Serviços Financeiros já é líquido do custo de antecipação.
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">
+    <b>Pendências de cálculo:</b> nenhuma fórmula da planilha ficou sem reprodução &mdash; todos os 5 parâmetros, as 8 colunas calculadas e a comparação com o realizado foram portados. As bandas refletem a volatilidade histórica (MDR estável ~5%, Serviços Financeiros volátil ~28%) e não um intervalo estatístico formal. Para reduzir o erro de Serviços Financeiros seriam necessários a data de liquidação efetiva por transação e a abertura do realizado em juros/antecipação/saque.
+  </p>
+</div>
+
+<script>
+const SEED = {"data": [{"mes": "mai/25", "bruta": 2848353, "liquida": 2692832.9262, "mdr": 1392733.18943064, "sf": 749953.9699467, "base": 2142687.15937734, "cons": 1863063.38832073, "otim": 2422310.93043395, "realizado": 2029720}, {"mes": "jun/25", "bruta": 2924697, "liquida": 2765008.5438, "mdr": 1430062.41885336, "sf": 770054.8794483, "base": 2200117.29830166, "cons": 1912998.81111347, "otim": 2487235.78548985, "realizado": 2217458}, {"mes": "jul/25", "bruta": 2972617, "liquida": 2810312.1118, "mdr": 1453493.42422296, "sf": 782671.9231363, "base": 2236165.34735926, "cons": 1944342.53766995, "otim": 2527988.15704857, "realizado": 2197284}, {"mes": "ago/25", "bruta": 3217339, "liquida": 3041672.2906, "mdr": 1573152.90869832, "sf": 847105.7329321, "base": 2420258.64163042, "cons": 2104411.39097452, "otim": 2736105.89228632, "realizado": 2138253}, {"mes": "set/25", "bruta": 3500585, "liquida": 3309453.059, "mdr": 1711649.1221148, "sf": 921682.6769315, "base": 2633331.7990463, "cons": 2289678.19339974, "otim": 2976985.40469286, "realizado": 2828260}, {"mes": "out/25", "bruta": 3340672, "liquida": 3158271.3088, "mdr": 1633457.92091136, "sf": 879578.5595008, "base": 2513036.48041216, "cons": 2185081.58770637, "otim": 2840991.37311795, "realizado": 2539567}, {"mes": "nov/25", "bruta": 3923461, "liquida": 3709240.0294, "mdr": 1918418.94320568, "sf": 1033023.3481879, "base": 2951442.29139358, "cons": 2566274.80674068, "otim": 3336609.77604648, "realizado": 2564071}, {"mes": "dez/25", "bruta": 3670948, "liquida": 3470514.2392, "mdr": 1794949.96451424, "sf": 966538.2156172, "base": 2761488.18013144, "cons": 2401109.98153291, "otim": 3121866.37872997, "realizado": 3064378}, {"mes": "jan/26", "bruta": 4377046, "liquida": 4138059.2884, "mdr": 2140204.26396048, "sf": 1152449.5118194, "base": 3292653.77577988, "cons": 2862957.69927242, "otim": 3722349.85228734, "realizado": 2967428}, {"mes": "fev/26", "bruta": 3485068, "liquida": 3294783.2872, "mdr": 1704061.91613984, "sf": 917597.1454852, "base": 2621659.06162504, "cons": 2279528.76508219, "otim": 2963789.35816789, "realizado": 2480770}, {"mes": "mar/26", "bruta": 3720277, "liquida": 3517149.8758, "mdr": 1819069.91576376, "sf": 979526.2404103, "base": 2798596.15617406, "cons": 2433375.31307099, "otim": 3163816.99927713, "realizado": 2310840}, {"mes": "abr/26", "bruta": 3068226, "liquida": 2900700.8604, "mdr": 1500242.48499888, "sf": 807845.1896214, "base": 2308087.67462028, "cons": 2006878.89727634, "otim": 2609296.45196422, "realizado": 2446510}, {"mes": "mai/26", "bruta": 2879964, "liquida": 2722717.9656, "mdr": 1408189.73180832, "sf": 758276.9534196, "base": 2166466.68522792, "cons": 1883739.65168002, "otim": 2449193.71877582, "realizado": 2409382}, {"mes": "jun/26", "bruta": 3113263, "liquida": 2943278.8402, "mdr": 1522263.81615144, "sf": 819703.1569957, "base": 2341966.97314714, "cons": 2036336.89838077, "otim": 2647597.04791351, "realizado": null}], "params": {"tx": 0.0546, "fmdr": 0.5172, "fsf": 0.2785, "bmdr": 0.05, "bsf": 0.28}};
+const fmt = n => (n==null||n===""||isNaN(n)) ? "\u2014" : Math.round(n).toLocaleString("pt-BR");
+const fmtPct = n => (n==null||isNaN(n))?"\u2014":(n*100).toFixed(1).replace(".",",")+"%";
+
+let rows = JSON.parse(JSON.stringify(SEED.data));
+let P = Object.assign({}, SEED.params);
+
+function compute(r){
+  const liq = r.bruta*(1-P.tx);
+  const mdr = liq*P.fmdr, sf = liq*P.fsf;
+  const base = mdr+sf;
+  const cons = mdr*(1-P.bmdr)+sf*(1-P.bsf);
+  const otim = mdr*(1+P.bmdr)+sf*(1+P.bsf);
+  const err = (r.realizado!=null && r.realizado>0) ? (r.realizado-base)/r.realizado : null;
+  return {liq,mdr,sf,base,cons,otim,err};
+}
+
+function render(){
+  const tb=document.getElementById("tbody"); tb.innerHTML="";
+  rows.forEach((r,i)=>{
+    const c=compute(r);
+    const fut = (r.realizado==null||r.realizado==="");
+    const tr=document.createElement("tr"); if(fut) tr.className="fut";
+    const errCls = c.err==null?"":(c.err>=0?"err-neg":"err-pos");
+    tr.innerHTML="<td>"+r.mes+"</td>"+
+      "<td><input type='number' value='"+(r.bruta!=null?r.bruta:"")+"' data-i='"+i+"'></td>"+
+      "<td>"+fmt(c.liq)+"</td><td>"+fmt(c.mdr)+"</td><td>"+fmt(c.sf)+"</td>"+
+      "<td style='color:var(--cons)'>"+fmt(c.cons)+"</td>"+
+      "<td style='font-weight:700'>"+fmt(c.base)+"</td>"+
+      "<td style='color:var(--otim)'>"+fmt(c.otim)+"</td>"+
+      "<td>"+fmt(r.realizado)+"</td>"+
+      "<td class='"+errCls+"'>"+fmtPct(c.err)+"</td>";
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll("input").forEach(inp=>inp.addEventListener("input",e=>{
+    rows[+e.target.dataset.i].bruta=parseFloat(e.target.value)||0; render();
+  }));
+
+  const futRows = rows.filter(r=>r.realizado==null||r.realizado==="");
+  const last = futRows.length?futRows[futRows.length-1]:rows[rows.length-1];
+  const lc = compute(last);
+  document.getElementById("scnCards").innerHTML =
+    "<div class='scard cons'><div class='nm'>Conservador</div><div class='big'>"+fmt(lc.cons)+"</div>"+
+      "<div class='br'><span>MDR</span><b>"+fmt(lc.mdr*(1-P.bmdr))+"</b></div>"+
+      "<div class='br'><span>Serv. Fin.</span><b>"+fmt(lc.sf*(1-P.bsf))+"</b></div></div>"+
+    "<div class='scard base'><div class='nm'>Base &middot; "+last.mes+"</div><div class='big'>"+fmt(lc.base)+"</div>"+
+      "<div class='br'><span>MDR</span><b>"+fmt(lc.mdr)+"</b></div>"+
+      "<div class='br'><span>Serv. Fin.</span><b>"+fmt(lc.sf)+"</b></div></div>"+
+    "<div class='scard otim'><div class='nm'>Otimista</div><div class='big'>"+fmt(lc.otim)+"</div>"+
+      "<div class='br'><span>MDR</span><b>"+fmt(lc.mdr*(1+P.bmdr))+"</b></div>"+
+      "<div class='br'><span>Serv. Fin.</span><b>"+fmt(lc.sf*(1+P.bsf))+"</b></div></div>";
+
+  const hist=rows.filter(r=>r.realizado!=null&&r.realizado>0).map(r=>Object.assign({},r,compute(r)));
+  const errs=hist.map(h=>h.err);
+  const mape=errs.reduce((a,b)=>a+Math.abs(b),0)/errs.length;
+  const maxe=Math.max.apply(null,errs.map(Math.abs));
+  const inBand=hist.filter(h=>h.realizado>=h.cons&&h.realizado<=h.otim).length;
+  const bias=hist.reduce((a,h)=>a+(h.realizado-h.base),0)/hist.length;
+
+  document.getElementById("kpis").innerHTML=
+    "<div class='kpi k-acc'><div class='lab'>Próx. mês &middot; base</div><div class='val'>"+fmt(lc.base)+"</div><div class='note'>"+last.mes+" &middot; bruta "+fmt(last.bruta)+"</div></div>"+
+    "<div class='kpi'><div class='lab'>Erro médio (MAPE)</div><div class='val'>"+fmtPct(mape)+"</div><div class='note'>base vs. realizado, "+hist.length+" meses</div></div>"+
+    "<div class='kpi k-otim'><div class='lab'>Dentro da banda</div><div class='val'>"+inBand+" / "+hist.length+"</div><div class='note'>realizado entre cons. e otim.</div></div>"+
+    "<div class='kpi k-cons'><div class='lab'>Viés médio</div><div class='val'>"+(bias>=0?"+":"")+fmt(bias)+"</div><div class='note'>realizado &minus; base</div></div>";
+
+  document.getElementById("adherNote").innerHTML=
+    "MAPE de <b>"+fmtPct(mape)+"</b> e maior erro de <b>"+fmtPct(maxe)+"</b>. O realizado caiu dentro da banda em <b>"+inBand+" de "+hist.length+"</b> meses. Viés médio de <b>"+fmt(bias)+"</b> indica "+(Math.abs(bias)<60000?"projeção bem centrada":(bias>0?"leve subestimação":"leve superestimação"))+".";
+
+  document.getElementById("rowFoot").textContent=rows.length+" meses no total \u00b7 "+futRows.length+" projetado(s) sem realizado.";
+  drawCharts();
+}
+
+let mainChart, errChart;
+function drawCharts(){
+  const labels=rows.map(r=>r.mes);
+  const comp=rows.map(compute);
+  const base=comp.map(c=>c.base), cons=comp.map(c=>c.cons), otim=comp.map(c=>c.otim);
+  const real=rows.map(r=>(r.realizado!=null&&r.realizado!=="")?r.realizado:null);
+
+  if(mainChart) mainChart.destroy();
+  mainChart=new Chart(document.getElementById("chartMain"),{
+    type:"line",
+    data:{labels:labels,datasets:[
+      {label:"Otimista",data:otim,borderColor:"rgba(154,167,189,0)",backgroundColor:"rgba(46,84,150,.10)",fill:"+1",pointRadius:0,tension:.3},
+      {label:"Conservador",data:cons,borderColor:"rgba(154,167,189,.55)",borderDash:[4,3],backgroundColor:"transparent",fill:false,pointRadius:0,tension:.3},
+      {label:"Base",data:base,borderColor:"#2E5496",borderWidth:2.4,pointRadius:2.5,tension:.3,fill:false},
+      {label:"Realizado",data:real,borderColor:"#C0392B",borderWidth:2.8,pointRadius:3.2,tension:.3,fill:false,spanGaps:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+": "+(c.parsed.y==null?"\u2014":Math.round(c.parsed.y).toLocaleString("pt-BR"))}}},
+      scales:{y:{ticks:{callback:v=>(v/1e6).toFixed(1)+"M"},grid:{color:"#eceae3"}},x:{grid:{display:false}}}}
+  });
+
+  const histLabels=rows.filter(r=>r.realizado!=null&&r.realizado>0).map(r=>r.mes);
+  const histErr=rows.filter(r=>r.realizado!=null&&r.realizado>0).map(r=>compute(r).err*100);
+  if(errChart) errChart.destroy();
+  errChart=new Chart(document.getElementById("chartErr"),{
+    type:"bar",
+    data:{labels:histLabels,datasets:[{data:histErr,
+      backgroundColor:histErr.map(e=>e>=0?"#C0392B":"#0F7B6C"),borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.parsed.y).toFixed(1)+"%"}}},
+      scales:{y:{ticks:{callback:v=>v+"%"},grid:{color:"#eceae3"}},x:{grid:{display:false}}}}
+  });
+}
+
+const pmap={p_tx:"tx",p_fmdr:"fmdr",p_fsf:"fsf",p_bmdr:"bmdr",p_bsf:"bsf"};
+function syncParamInputs(){for(const id in pmap)document.getElementById(id).value=P[pmap[id]];}
+for(const id in pmap){document.getElementById(id).addEventListener("input",e=>{P[pmap[id]]=parseFloat(e.target.value)||0;render();});}
+
+document.getElementById("addBtn").addEventListener("click",()=>{
+  const last=rows[rows.length-1];
+  const parts=last.mes.split("/"); const mm=parts[0], yy=parts[1];
+  const names=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  let mi=names.indexOf(mm), y=parseInt(yy); mi++; if(mi>11){mi=0;y++;}
+  rows.push({mes:names[mi]+"/"+String(y).padStart(2,"0"),bruta:last.bruta,realizado:null});
+  render();
+});
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  rows=JSON.parse(JSON.stringify(SEED.data));P=Object.assign({},SEED.params);syncParamInputs();render();
+});
+
+syncParamInputs();
+render();
+</script>
+</body>
+</html>
