@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lastlink · Fechamento Detalhado · Junho 2026</title>
+<style>
+:root{--ink:#0f1117;--ink-2:#3a3f52;--ink-3:#6b7280;--paper:#fff;--paper-2:#f8f9fb;--paper-3:#eef0f5;
+--accent:#5046e5;--accent-light:#ede9fe;--green:#059669;--green-light:#d1fae5;--red:#dc2626;--red-light:#fee2e2;
+--amber:#d97706;--amber-light:#fef3c7;--border:#e5e7eb;--sidebar-w:220px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--paper-2);color:var(--ink);line-height:1.5}
+.sidebar{position:fixed;left:0;top:0;width:var(--sidebar-w);height:100vh;background:var(--ink);color:#fff;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.sidebar-logo{padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-logo .brand{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.sidebar-logo .period{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.sidebar-logo .badge{display:inline-block;margin-top:8px;padding:2px 8px;background:var(--accent);border-radius:4px;font-size:10px;font-weight:600}
+.nav-section{padding:16px 0 4px}
+.nav-label{padding:4px 20px;font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.nav-item{display:block;padding:7px 20px;font-size:12.5px;color:rgba(255,255,255,.65);text-decoration:none;cursor:pointer;transition:all .15s;border-left:2px solid transparent}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav-item.active{color:#fff;border-left-color:var(--accent);background:rgba(80,70,229,.15)}
+.main{margin-left:var(--sidebar-w);padding:32px 36px;min-height:100vh}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px}
+.page-title{font-size:22px;font-weight:700;letter-spacing:-.4px}
+.page-subtitle{font-size:13px;color:var(--ink-3);margin-top:4px}
+.page-meta{text-align:right;font-size:12px;color:var(--ink-3)}
+.update-tag{display:inline-block;padding:3px 10px;background:var(--green-light);color:var(--green);border-radius:4px;font-size:11px;font-weight:600}
+.section{margin-bottom:36px}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-3);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px}
+.section-title .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:28px}
+.kpi-card{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.kpi-card.green::before{background:var(--green)} .kpi-card.red::before{background:var(--red)} .kpi-card.amber::before{background:var(--amber)}
+.kpi-label{font-size:11px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.4px}
+.kpi-value{font-size:22px;font-weight:700;letter-spacing:-.5px;margin:6px 0 4px}
+.kpi-delta{font-size:11px;display:flex;align-items:center;gap:4px}
+.kpi-delta .up{color:var(--green)} .kpi-delta .down{color:var(--red)} .kpi-delta .neutral{color:var(--ink-3)}
+.kpi-sub{font-size:10.5px;color:var(--ink-3);margin-top:2px}
+.table-wrap{background:var(--paper);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{background:var(--paper-2);padding:10px 12px;text-align:right;font-size:10.5px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid var(--border);white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;text-align:right;color:var(--ink-2);white-space:nowrap}
+td:first-child{text-align:left;font-weight:500;color:var(--ink)}
+tr:last-child td{border-bottom:none}
+tr.subtotal td{background:var(--paper-2);font-weight:600}
+tr.total td{background:var(--ink);color:#fff;font-weight:700} tr.total td:first-child{color:#fff}
+tr.indent td:first-child{padding-left:22px;color:var(--ink-2);font-size:11.5px}
+tr.indent2 td:first-child{padding-left:36px;color:var(--ink-3);font-size:11px}
+tr.grp td{background:#f2f3f7;font-weight:700;font-size:11.5px}
+.positive{color:var(--green)!important} .negative{color:var(--red)!important}
+.pct{color:var(--ink-3);font-size:11px}
+.alert{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:8px;margin-bottom:12px;font-size:12.5px}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert.warning{background:var(--amber-light);border:1px solid #fcd34d}
+.alert.danger{background:var(--red-light);border:1px solid #fca5a5}
+.alert.success{background:var(--green-light);border:1px solid #6ee7b7}
+.alert.info{background:var(--accent-light);border:1px solid #c4b5fd}
+.alert-title{font-weight:700;margin-bottom:2px}
+.chart-wrap{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px}
+.chart-title{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:16px}
+.bar-chart{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-label{font-size:11px;color:var(--ink-3);width:150px;text-align:right;flex-shrink:0}
+.bar-track{flex:1;background:var(--paper-3);border-radius:4px;height:20px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px}
+.bar-fill span{font-size:10.5px;font-weight:600;color:#fff;white-space:nowrap}
+.bar-val{font-size:11.5px;font-weight:600;color:var(--ink);width:90px;flex-shrink:0}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10.5px;font-weight:600}
+.tag-green{background:var(--green-light);color:var(--green)} .tag-red{background:var(--red-light);color:var(--red)}
+.tag-amber{background:var(--amber-light);color:var(--amber)} .tag-purple{background:var(--accent-light);color:var(--accent)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.comment-card{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.comment-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.comment-icon{font-size:18px} .comment-title{font-size:13px;font-weight:700}
+.comment-body{font-size:12.5px;color:var(--ink-2);line-height:1.65}
+.anchor{scroll-margin-top:20px}
+.var-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--paper)}
+.var-col:first-child{border-right:1px solid var(--border)}
+.var-head{background:var(--ink);color:#fff;padding:12px 18px;font-size:12px;font-weight:700;letter-spacing:.4px}
+.var-body{padding:14px 18px}
+.var-sub{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 8px;color:var(--accent)}
+.var-sub.rec{color:var(--green)}
+.var-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--ink-2);margin-bottom:7px;line-height:1.45}
+.var-item .mk{flex-shrink:0;width:8px;height:8px;border-radius:50%;margin-top:5px}
+.var-item .mk.up{background:var(--red)} .var-item .mk.down{background:var(--green)}
+.var-note{display:block;margin-top:3px;font-size:10.5px;color:var(--amber);background:var(--amber-light);padding:4px 8px;border-radius:4px;border-left:2px solid var(--amber)}
+.src-badge{display:inline-block;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;background:#1e293b;color:#93c5fd;margin-left:8px;vertical-align:middle;letter-spacing:.3px}
+
+tr.dre-total td{background:var(--ink);color:#fff;font-weight:700;font-size:12.5px}
+tr.dre-total td:first-child{color:#fff;text-transform:uppercase;letter-spacing:.3px}
+tr.dre-cat td{background:#eef0f5;font-weight:700;font-size:12px;color:var(--ink)}
+tr.dre-cat td:first-child{color:var(--ink)}
+tr.dre-sub td{background:var(--green-light);font-weight:700;font-size:12px}
+tr.dre-sub td:first-child{color:var(--green)}
+tr.dre-ebitda td{background:var(--accent-light);font-weight:700;font-size:12px;color:var(--accent)}
+tr.dre-item td:first-child{padding-left:24px;font-weight:400;font-size:11.5px;color:var(--ink-2)}
+tr.dre-item td{font-size:11.5px}
+tr.dre-subitem td:first-child{padding-left:40px;font-weight:400;font-size:11px;color:var(--ink-3);font-style:italic}
+tr.dre-subitem td{font-size:11px;color:var(--ink-3)}
+tr.dre-mg td:first-child{padding-left:12px;font-size:10.5px;color:var(--ink-3);font-style:italic}
+tr.dre-mg td{font-size:10.5px;color:var(--ink-3);font-style:italic}
+@media(max-width:900px){.sidebar{width:56px}.sidebar .brand,.sidebar .period,.sidebar .badge,.nav-label,.nav-item{font-size:0}.main{margin-left:56px;padding:20px}.two-col,.var-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<nav class="sidebar">
+<div class="sidebar-logo"><div class="brand">Lastlink</div><div class="period">Fechamento Detalhado</div><div class="badge">Jun 2026</div></div>
+<div class="nav-section"><div class="nav-label">Visão Geral</div>
+<a class="nav-item active" href="#kpis">KPIs do Mês</a><a class="nav-item" href="#variacoes">Principais Variações</a><a class="nav-item" href="#alertas">Alertas</a></div>
+<div class="nav-section"><div class="nav-label">DRE</div>
+<a class="nav-item" href="#dre">DRE Completa</a><a class="nav-item" href="#analise-var">Análise de Variação</a><a class="nav-item" href="#margens">Margens</a></div>
+<div class="nav-section"><div class="nav-label">Receita (Nekt)</div>
+<a class="nav-item" href="#rec-vertical">Por Vertical</a><a class="nav-item" href="#rec-canal">Por Canal</a><a class="nav-item" href="#rec-produto">Por Produto</a></div>
+<div class="nav-section"><div class="nav-label">Custos</div>
+<a class="nav-item" href="#pessoas">Pessoal</a></div>
+<div class="nav-section"><div class="nav-label">Histórico</div>
+<a class="nav-item" href="#historico">Evolução Mensal</a><a class="nav-item" href="#comentarios">Comentários</a></div>
+</nav>
+<main class="main">
+<div class="page-header"><div><div class="page-title">Fechamento Mensal Detalhado</div>
+<div class="page-subtitle">Competência: Junho 2026 · Regime de Competência · Base consolidada (prévia)</div></div>
+<div class="page-meta"><div><span class="update-tag">✓ Atualizado</span></div><div style="margin-top:6px">Fechamento: Jun/2026</div><div style="margin-top:2px">Receita por produto: Nekt (Athena)</div></div></div>
+
+<div id="kpis" class="section anchor"><div class="section-title"><div class="dot"></div>KPIs do Mês — Junho 2026</div>
+<div class="kpi-grid">
+<div class="kpi-card"><div class="kpi-label">Receita Bruta</div><div class="kpi-value">R$ 3.06M</div>
+<div class="kpi-delta"><span class="up">▲ +6.4%</span> <span class="neutral">vs Mai</span></div><div class="kpi-sub">YTD: R$ 20,6M</div></div>
+<div class="kpi-card green"><div class="kpi-label">Receita Líquida</div><div class="kpi-value">R$ 2.80M</div>
+<div class="kpi-delta"><span class="up">▲ +9.4%</span> <span class="neutral">vs Mai</span></div><div class="kpi-sub">YTD: R$ 18,6M</div></div>
+<div class="kpi-card red"><div class="kpi-label">EBITDA</div><div class="kpi-value">-R$ 1.02M</div>
+<div class="kpi-delta"><span class="down">▼ vs Mai (-R$ 0,82M)</span></div><div class="kpi-sub">Margem: -36.4%</div></div>
+<div class="kpi-card red"><div class="kpi-label">Lucro Líquido</div><div class="kpi-value">-R$ 0.91M</div>
+<div class="kpi-delta"><span class="down">▼ Prejuízo</span></div><div class="kpi-sub">Margem: -32.7%</div></div>
+<div class="kpi-card"><div class="kpi-label">GMV</div><div class="kpi-value">R$ 30.6M</div>
+<div class="kpi-delta"><span class="up">▲ +5.2%</span> <span class="neutral">vs Mai</span></div><div class="kpi-sub">YTD: R$ 193,5M</div></div>
+<div class="kpi-card"><div class="kpi-label">Take Rate</div><div class="kpi-value">R$ 1.48M</div>
+<div class="kpi-delta"><span class="neutral">4.83% do GMV</span></div><div class="kpi-sub">Mai: R$ 1,50M</div></div>
+<div class="kpi-card amber"><div class="kpi-label">Margem Bruta</div><div class="kpi-value">33.8%</div>
+<div class="kpi-delta"><span class="down">▼ -8.9pp vs Mai</span></div><div class="kpi-sub">Mai: 42.7%</div></div>
+<div class="kpi-card green"><div class="kpi-label">Caixa Final</div><div class="kpi-value">R$ 14.4M</div>
+<div class="kpi-delta"><span class="up">▲ Runway 24 meses</span></div><div class="kpi-sub">Reforçado por aporte (mai)</div></div>
+</div></div>
+
+<div id="variacoes" class="section anchor"><div class="section-title"><div class="dot" style="background:var(--amber)"></div>Principais Variações</div>
+<div class="var-grid">
+<div class="var-col"><div class="var-head">VS. MÊS ANTERIOR (MAIO/26)</div><div class="var-body">
+<div class="var-sub">Despesas</div>
+<div class="var-item"><span class="mk up"></span><div>+152k em Custo de Antecipação</div></div>
+<div class="var-item"><span class="mk up"></span><div>+140k GIF</div></div>
+<div class="var-item"><span class="mk up"></span><div>+100k em parcerias (Bijari)</div></div>
+<div class="var-item"><span class="mk up"></span><div>+85k em reembolsos<span class="var-note">Issue ENG-2432 (valores a mais no arredondamento no processo de antecipação de recebíveis, engenharia tratando)</span></div></div>
+<div class="var-item"><span class="mk up"></span><div>+55k Jobler (contratação CTO)</div></div>
+<div class="var-item"><span class="mk up"></span><div>+21k em MGM (GCO)</div></div>
+<div class="var-item"><span class="mk up"></span><div>+10k em relacionamento de leads (ingresso Carlos Magno)</div></div>
+<div class="var-item"><span class="mk down"></span><div>-128k em jornada (viagem do Ariel)</div></div>
+<div class="var-item"><span class="mk down"></span><div>-140k referente a Pacific</div></div>
+<div class="var-item"><span class="mk down"></span><div>-35k em Eventos Patrocinados (evento do Édipo em maio)</div></div>
+<div class="var-item"><span class="mk down"></span><div>-29k em consultoria (BCP)</div></div>
+<div class="var-item"><span class="mk down"></span><div>-73k Opice Blum (entrando em maio)</div></div>
+<div class="var-sub rec">Receita</div>
+<div class="var-item"><span class="mk down"></span><div>+117k em Receitas Financeiras (rendimento da aplicação)</div></div>
+</div></div>
+<div class="var-col"><div class="var-head">VS. ORÇAMENTO (BUDGET)</div><div class="var-body">
+<div class="var-sub">Despesas</div>
+<div class="var-item"><span class="mk down"></span><div>-140k referente a Trust</div></div>
+<div class="var-item"><span class="mk down"></span><div>-134k em Eventos (em validação)</div></div>
+<div class="var-item"><span class="mk down"></span><div>-35k em AWS (créditos)</div></div>
+<div class="var-item"><span class="mk down"></span><div>-28k em ADS</div></div>
+<div class="var-item"><span class="mk up"></span><div>+115k em parcerias (Bijari representa 100k)</div></div>
+<div class="var-item"><span class="mk up"></span><div>+80k em Custo de Antecipação</div></div>
+<div class="var-item"><span class="mk up"></span><div>+20k em viagens (budget considera 12k para Sales, e tivemos 6k em C-level, 17k em Sales, 5k em CX e 2k em Payments)</div></div>
+<div class="var-item"><span class="mk up"></span><div>+56k em Pessoal (abrindo pra entender)</div></div>
+</div></div>
+</div>
+<div style="font-size:10.5px;color:var(--ink-3);margin-top:8px">Fonte: análise de variação da prévia de fechamento. Valores em R$ mil. Verde = redução de despesa / efeito favorável; vermelho = aumento de despesa.</div>
+</div>
+
+<div id="alertas" class="section anchor"><div class="section-title"><div class="dot" style="background:var(--red)"></div>Alertas &amp; Destaques do Mês</div>
+<div class="alert danger"><div class="alert-icon">🔴</div><div><div class="alert-title">EBITDA Negativo em Junho: -R$ 1,02M</div>
+O EBITDA de junho ficou em -R$ 1,02M, o resultado mais negativo de 2026, pressionado por COGS elevado (custo de antecipação de R$ 818K). A margem bruta caiu para 33.8% (de 42.7% em maio).</div></div>
+<div class="alert warning"><div class="alert-icon">🟡</div><div><div class="alert-title">Custo de Antecipação de Recebíveis: R$ 818K (+23% vs Mai)</div>
+O custo de antecipação saltou de R$ 665K (mai) para R$ 818K (jun).</div></div>
+<div class="alert success"><div class="alert-icon">🟢</div><div><div class="alert-title">Caixa Reforçado: R$ 14,4M — Runway de 24 meses</div>
+Após aporte de capital de R$ 10,6M em maio e recuperação parcial do incidente de 20/03, o caixa encerra junho em R$ 14,4M, revertendo a posição apertada dos meses anteriores.</div></div>
+<div class="alert info"><div class="alert-icon">🔵</div><div><div class="alert-title">Receita Bruta Acima do Budget: +R$ 42K</div>
+A receita bruta de junho (R$ 3,06M) superou o orçamento (R$ 3,02M) em R$ 42K (+1,4%), e o EBITDA veio R$ 46K melhor que o budget.</div></div>
+</div>
+
+<div id="dre" class="section anchor"><div class="section-title"><div class="dot"></div>DRE Completa — Competência 2026 (abertura completa)</div>
+<div class="table-wrap"><table><thead><tr><th style="width:26%">Linha DRE</th><th>Jan/26</th><th>Fev/26</th><th>Mar/26</th><th>Abr/26</th><th>Mai/26</th><th>Jun/26</th></tr></thead><tbody>
+<tr class="dre-cat"><td>GMV</td><td class="">37.788.579</td><td class="">31.813.514</td><td class="">34.245.304</td><td class="">30.053.811</td><td class="">29.033.840</td><td class="">30.554.353</td></tr>
+<tr class="dre-item"><td>Criador novo</td><td class="">1.798.750</td><td class="">1.940.069</td><td class="">2.483.413</td><td class="">1.473.037</td><td class="">1.651.681</td><td class="">1.121.807</td></tr>
+<tr class="dre-item"><td>Criador existente</td><td class="">32.713.453</td><td class="">27.112.604</td><td class="">29.177.067</td><td class="">26.144.731</td><td class="">24.521.050</td><td class="">26.649.062</td></tr>
+<tr class="dre-item"><td>Renovação</td><td class="">3.276.375</td><td class="">2.760.841</td><td class="">2.584.824</td><td class="">2.436.042</td><td class="">2.861.109</td><td class="">2.783.484</td></tr>
+<tr class="dre-cat"><td>Receita Bruta</td><td class="">4.377.046</td><td class="">3.485.068</td><td class="">3.720.277</td><td class="">3.068.226</td><td class="">2.879.964</td><td class="">3.064.952</td></tr>
+<tr class="dre-item"><td>Take Rate</td><td class="">2.239.930</td><td class="">1.806.871</td><td class="">1.876.015</td><td class="">1.535.468</td><td class="">1.503.108</td><td class="">1.477.295</td></tr>
+<tr class="dre-subitem"><td>Criador novo</td><td class="">154.090</td><td class="">151.373</td><td class="">156.211</td><td class="">101.722</td><td class="">123.658</td><td class="">83.491</td></tr>
+<tr class="dre-subitem"><td>Criador antigo / membro novo</td><td class="">1.867.073</td><td class="">1.456.476</td><td class="">1.525.633</td><td class="">1.247.267</td><td class="">1.181.783</td><td class="">1.200.417</td></tr>
+<tr class="dre-subitem"><td>Renovação</td><td class="">218.767</td><td class="">199.022</td><td class="">194.171</td><td class="">186.478</td><td class="">197.668</td><td class="">193.387</td></tr>
+<tr class="dre-item"><td>Serviços Financeiros</td><td class="">2.137.116</td><td class="">1.678.197</td><td class="">1.844.262</td><td class="">1.532.758</td><td class="">1.376.856</td><td class="">1.587.656</td></tr>
+<tr class="dre-subitem"><td>Antecipação</td><td class="">140.394</td><td class="">140.483</td><td class="">166.237</td><td class="">70.829</td><td class="">61.383</td><td class="">64.234</td></tr>
+<tr class="dre-subitem"><td>Parcelamento</td><td class="">1.990.754</td><td class="">1.532.389</td><td class="">1.673.822</td><td class="">1.461.929</td><td class="">1.315.237</td><td class="">1.516.507</td></tr>
+<tr class="dre-subitem"><td>Tarifa de saque</td><td class="">5.968</td><td class="">5.325</td><td class="">4.204</td><td class="">0</td><td class="">237</td><td class="">6.915</td></tr>
+<tr class="dre-item"><td>(-) Deduções Fiscais</td><td class="negative">(372.562)</td><td class="negative">(328.339)</td><td class="negative">(351.719)</td><td class="negative">(357.838)</td><td class="negative">(320.867)</td><td class="negative">(264.946)</td></tr>
+<tr class="dre-subitem"><td>ISSQN Próprio</td><td class="negative">(134.927)</td><td class="negative">(60.000)</td><td class="negative">(83.000)</td><td class="negative">(89.000)</td><td class="negative">(67.809)</td><td class="negative">(73.249)</td></tr>
+<tr class="dre-subitem"><td>PIS</td><td class="negative">(47.591)</td><td class="negative">(47.837)</td><td class="negative">(47.905)</td><td class="negative">(47.932)</td><td class="negative">(45.114)</td><td class="negative">(34.180)</td></tr>
+<tr class="dre-subitem"><td>COFINS</td><td class="negative">(190.044)</td><td class="negative">(220.502)</td><td class="negative">(220.814)</td><td class="negative">(220.906)</td><td class="negative">(207.943)</td><td class="negative">(157.517)</td></tr>
+<tr class="dre-cat"><td>Receita Operacional Líquida</td><td class="">4.004.484</td><td class="">3.156.728</td><td class="">3.368.558</td><td class="">2.710.388</td><td class="">2.559.098</td><td class="">2.800.006</td></tr>
+<tr class="dre-total"><td>(-) COGS</td><td class="negative">(2.017.513)</td><td class="negative">(1.832.562)</td><td class="negative">(1.783.609)</td><td class="negative">(1.634.832)</td><td class="negative">(1.465.948)</td><td class="negative">(1.852.891)</td></tr>
+<tr class="dre-cat2"><td>Fraude e Prevenção</td><td class="negative">(59.989)</td><td class="negative">(60.332)</td><td class="negative">(69.021)</td><td class="negative">(96.089)</td><td class="negative">(105.843)</td><td class="negative">(98.435)</td></tr>
+<tr class="dre-subitem"><td>Ferramenta de Prevenção</td><td class="negative">(45.062)</td><td class="negative">(45.128)</td><td class="negative">(43.986)</td><td class="negative">(41.404)</td><td class="negative">(43.059)</td><td class="negative">(40.722)</td></tr>
+<tr class="dre-subitem"><td>Pessoal</td><td class="negative">(14.038)</td><td class="negative">(15.204)</td><td class="negative">(25.035)</td><td class="negative">(54.685)</td><td class="negative">(53.642)</td><td class="negative">(55.498)</td></tr>
+<tr class="dre-subitem"><td>Viagens</td><td class="negative">(889)</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(2.214)</td></tr>
+<tr class="dre-cat2"><td>Infraestrutura</td><td class="negative">(150.535)</td><td class="negative">(111.604)</td><td class="negative">(127.395)</td><td class="negative">(112.091)</td><td class="negative">(74.153)</td><td class="negative">(211.724)</td></tr>
+<tr class="dre-subitem"><td>Hospedagem de Vídeo</td><td class="negative">(53.654)</td><td class="negative">(64.079)</td><td class="negative">(65.164)</td><td class="negative">(58.961)</td><td class="negative">(52.654)</td><td class="negative">(52.754)</td></tr>
+<tr class="dre-subitem"><td>Nuvem</td><td class="negative">(83.190)</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(11.535)</td><td class="negative">(28.778)</td></tr>
+<tr class="dre-subitem"><td>Proxies</td><td class="negative">(2.864)</td><td class="negative">(5.864)</td><td class="negative">(8.864)</td><td class="negative">(5.864)</td><td class="negative">(2.864)</td><td class="negative">(5.864)</td></tr>
+<tr class="dre-subitem"><td>Despesas com Incidente</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(117.313)</td></tr>
+<tr class="dre-subitem"><td>Software e Ferramentas</td><td class="negative">(10.827)</td><td class="negative">(41.661)</td><td class="negative">(53.366)</td><td class="negative">(47.266)</td><td class="negative">(7.100)</td><td class="negative">(7.015)</td></tr>
+<tr class="dre-cat2"><td>Operação de Pagamentos</td><td class="negative">(1.691.089)</td><td class="negative">(1.486.808)</td><td class="negative">(1.440.539)</td><td class="negative">(1.242.570)</td><td class="negative">(1.119.482)</td><td class="negative">(1.389.103)</td></tr>
+<tr class="dre-subitem"><td>Operação c/ Resgate Futuro</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(10.798)</td></tr>
+<tr class="dre-subitem"><td>Custos Sub</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(11.919)</td></tr>
+<tr class="dre-cat2"><td>Iugu</td><td class="negative">(1.691.089)</td><td class="negative">(1.486.808)</td><td class="negative">(1.440.539)</td><td class="negative">(1.242.570)</td><td class="negative">(1.119.482)</td><td class="negative">(1.366.386)</td></tr>
+<tr class="dre-subitem"><td>Taxa de Boleto</td><td class="negative">(325)</td><td class="negative">(227)</td><td class="negative">(308)</td><td class="negative">(3.846)</td><td class="negative">(236)</td><td class="negative">(287)</td></tr>
+<tr class="dre-subitem"><td>Taxa de Cartão</td><td class="negative">(389.373)</td><td class="negative">(262.414)</td><td class="negative">(299.820)</td><td class="negative">(258.806)</td><td class="negative">(237.621)</td><td class="negative">(256.645)</td></tr>
+<tr class="dre-subitem"><td>Taxa PIX</td><td class="negative">(102.714)</td><td class="negative">(87.882)</td><td class="negative">(76.005)</td><td class="negative">(64.215)</td><td class="negative">(75.239)</td><td class="negative">(76.377)</td></tr>
+<tr class="dre-subitem"><td>Custo Antecipação de Recebíveis</td><td class="negative">(885.272)</td><td class="negative">(855.897)</td><td class="negative">(898.077)</td><td class="negative">(811.440)</td><td class="negative">(665.044)</td><td class="negative">(817.811)</td></tr>
+<tr class="dre-subitem"><td>Chargeback</td><td class="negative">(22.600)</td><td class="negative">(22.413)</td><td class="negative">(16.492)</td><td class="negative">(13.687)</td><td class="negative">(20.263)</td><td class="negative">(11.201)</td></tr>
+<tr class="dre-subitem"><td>Reembolso</td><td class="negative">(286.516)</td><td class="negative">(253.942)</td><td class="negative">(145.766)</td><td class="negative">(85.869)</td><td class="negative">(117.252)</td><td class="negative">(202.565)</td></tr>
+<tr class="dre-subitem"><td>Licenciamento</td><td class="negative">(1.500)</td><td class="negative">(1.500)</td><td class="negative">(1.500)</td><td class="negative">(1.500)</td><td class="negative">(1.500)</td><td class="negative">(1.500)</td></tr>
+<tr class="dre-cat2"><td>Suporte</td><td class="negative">(115.901)</td><td class="negative">(173.818)</td><td class="negative">(146.653)</td><td class="negative">(184.082)</td><td class="negative">(166.469)</td><td class="negative">(153.630)</td></tr>
+<tr class="dre-subitem"><td>Suporte — Pessoal</td><td class="negative">(102.844)</td><td class="negative">(155.895)</td><td class="negative">(142.054)</td><td class="negative">(167.741)</td><td class="negative">(146.718)</td><td class="negative">(131.513)</td></tr>
+<tr class="dre-subitem"><td>Suporte — Software</td><td class="negative">(12.811)</td><td class="negative">(14.016)</td><td class="negative">(2.221)</td><td class="negative">(14.556)</td><td class="negative">(17.478)</td><td class="negative">(17.478)</td></tr>
+<tr class="dre-subitem"><td>Suporte — Viagens</td><td class="negative">(246)</td><td class="negative">(3.907)</td><td class="negative">(2.378)</td><td class="negative">(189)</td><td class="negative">(2.273)</td><td class="negative">(4.639)</td></tr>
+<tr class="dre-sub"><td>Resultado Operacional Bruto</td><td class="">1.986.971</td><td class="">1.324.166</td><td class="">1.584.950</td><td class="">1.075.556</td><td class="">1.093.150</td><td class="">947.114</td></tr>
+<tr class="dre-mg"><td>Margem Bruta %</td><td class="pct">49.6%</td><td class="pct">41.9%</td><td class="pct">47.1%</td><td class="pct">39.7%</td><td class="pct">42.7%</td><td class="pct">33.8%</td></tr>
+<tr class="dre-total"><td>(-) Despesas Operacionais</td><td class="negative">(1.905.402)</td><td class="negative">(1.844.963)</td><td class="negative">(1.801.250)</td><td class="negative">(2.029.559)</td><td class="negative">(1.911.981)</td><td class="negative">(1.965.481)</td></tr>
+<tr class="dre-cat"><td>Despesas com Clientes</td><td class="negative">(298.043)</td><td class="negative">(137.898)</td><td class="negative">(154.985)</td><td class="negative">(176.586)</td><td class="negative">(74.334)</td><td class="negative">(369.012)</td></tr>
+<tr class="dre-item"><td>Jornada</td><td class="negative">(62.208)</td><td class="negative">(24.114)</td><td class="negative">(62.936)</td><td class="negative">(27.759)</td><td class="negative">(10.754)</td><td class="negative">(157.241)</td></tr>
+<tr class="dre-item"><td>Incentivo a Clientes</td><td class="negative">(140.000)</td><td class="negative">(50.000)</td><td class="negative">(20.000)</td><td class="negative">(80.000)</td><td class="negative">(10.000)</td><td class="negative">(10.000)</td></tr>
+<tr class="dre-item"><td>Member Get Member</td><td class="negative">(2.562)</td><td class="negative">(12.784)</td><td class="negative">(21.050)</td><td class="negative">(7.827)</td><td class="negative">(2.580)</td><td class="negative">(26.772)</td></tr>
+<tr class="dre-item"><td>Fees de Parcerias</td><td class="negative">(93.273)</td><td class="negative">(51.000)</td><td class="negative">(51.000)</td><td class="negative">(61.000)</td><td class="negative">(51.000)</td><td class="negative">(175.000)</td></tr>
+<tr class="dre-cat"><td>Vendas, Marketing e Relacionamento</td><td class="negative">(434.084)</td><td class="negative">(513.291)</td><td class="negative">(504.436)</td><td class="negative">(482.615)</td><td class="negative">(489.427)</td><td class="negative">(509.088)</td></tr>
+<tr class="dre-item"><td>Pessoal</td><td class="negative">(240.581)</td><td class="negative">(331.105)</td><td class="negative">(325.656)</td><td class="negative">(227.247)</td><td class="negative">(313.827)</td><td class="negative">(272.127)</td></tr>
+<tr class="dre-item"><td>Software e Ferramentas</td><td class="negative">(36.413)</td><td class="negative">(49.225)</td><td class="negative">(41.433)</td><td class="negative">(41.700)</td><td class="negative">(42.005)</td><td class="negative">(48.619)</td></tr>
+<tr class="dre-item"><td>Ads / Tráfego</td><td class="negative">(10.142)</td><td class="negative">(5.493)</td><td class="negative">(639)</td><td class="">0</td><td class="negative">(843)</td><td class="negative">(4.422)</td></tr>
+<tr class="dre-item"><td>Viagens</td><td class="negative">(6.722)</td><td class="negative">(6.470)</td><td class="negative">(17.373)</td><td class="negative">(12.143)</td><td class="negative">(15.975)</td><td class="negative">(17.313)</td></tr>
+<tr class="dre-item"><td>Relacionamento com Leads</td><td class="negative">(19.972)</td><td class="negative">(764)</td><td class="negative">(51.441)</td><td class="negative">(13.848)</td><td class="negative">(20.416)</td><td class="negative">(33.286)</td></tr>
+<tr class="dre-item"><td>Serviço de Terceiros</td><td class="negative">(67.183)</td><td class="negative">(15.924)</td><td class="negative">(13.100)</td><td class="negative">(43.220)</td><td class="negative">(8.680)</td><td class="negative">(44.101)</td></tr>
+<tr class="dre-item"><td>Eventos Proprietários</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(101.710)</td><td class="negative">(8.790)</td><td class="negative">(10.087)</td></tr>
+<tr class="dre-item"><td>Eventos Patrocinados</td><td class="negative">(46.140)</td><td class="negative">(3.005)</td><td class="negative">(17.088)</td><td class="negative">(11.224)</td><td class="negative">(44.742)</td><td class="negative">(15.045)</td></tr>
+<tr class="dre-item"><td>Projetos Especiais</td><td class="negative">(6.930)</td><td class="negative">(100.007)</td><td class="negative">(35.306)</td><td class="negative">(31.525)</td><td class="negative">(31.525)</td><td class="negative">(64.088)</td></tr>
+<tr class="dre-cat"><td>P&amp;D</td><td class="negative">(661.453)</td><td class="negative">(622.935)</td><td class="negative">(666.613)</td><td class="negative">(781.644)</td><td class="negative">(825.387)</td><td class="negative">(644.611)</td></tr>
+<tr class="dre-item"><td>Pessoal</td><td class="negative">(540.204)</td><td class="negative">(539.626)</td><td class="negative">(542.487)</td><td class="negative">(479.623)</td><td class="negative">(508.685)</td><td class="negative">(451.680)</td></tr>
+<tr class="dre-item"><td>Serviço de Terceiros</td><td class="negative">(65.103)</td><td class="negative">(47.158)</td><td class="negative">(67.718)</td><td class="negative">(252.915)</td><td class="negative">(266.248)</td><td class="negative">(22.791)</td></tr>
+<tr class="dre-item"><td>Software e Ferramentas</td><td class="negative">(51.908)</td><td class="negative">(36.151)</td><td class="negative">(56.408)</td><td class="negative">(49.105)</td><td class="negative">(50.454)</td><td class="negative">(61.167)</td></tr>
+<tr class="dre-item"><td>Despesas com Incidente</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(108.973)</td></tr>
+<tr class="dre-cat"><td>G&amp;A</td><td class="negative">(511.822)</td><td class="negative">(570.839)</td><td class="negative">(475.215)</td><td class="negative">(588.714)</td><td class="negative">(522.833)</td><td class="negative">(442.770)</td></tr>
+<tr class="dre-item"><td>Pessoal</td><td class="negative">(222.010)</td><td class="negative">(200.594)</td><td class="negative">(196.284)</td><td class="negative">(238.145)</td><td class="negative">(284.744)</td><td class="negative">(195.713)</td></tr>
+<tr class="dre-item"><td>Viagens</td><td class="negative">(13.166)</td><td class="negative">(89.782)</td><td class="negative">(47.716)</td><td class="negative">(6.897)</td><td class="negative">(21.278)</td><td class="negative">(6.352)</td></tr>
+<tr class="dre-item"><td>Consultoria</td><td class="negative">(45.000)</td><td class="negative">(101.250)</td><td class="negative">(73.125)</td><td class="negative">(73.125)</td><td class="negative">(45.000)</td><td class="negative">(15.699)</td></tr>
+<tr class="dre-item"><td>Assessoria Contábil / Jurídica</td><td class="negative">(24.618)</td><td class="negative">(42.710)</td><td class="negative">(57.767)</td><td class="negative">(126.535)</td><td class="negative">(85.864)</td><td class="negative">(53.250)</td></tr>
+<tr class="dre-item"><td>Despesas com Incidente</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="negative">(2.816)</td></tr>
+<tr class="dre-item"><td>Despesas Gerais e Adm</td><td class="negative">(31.931)</td><td class="negative">(63.336)</td><td class="negative">(50.290)</td><td class="negative">(43.871)</td><td class="negative">(53.073)</td><td class="negative">(68.981)</td></tr>
+<tr class="dre-item"><td>Eventos Internos</td><td class="negative">(54.758)</td><td class="negative">(4.292)</td><td class="negative">(5.840)</td><td class="">0</td><td class="negative">(276)</td><td class="negative">(1.700)</td></tr>
+<tr class="dre-item"><td>Software e Ferramentas</td><td class="negative">(13.982)</td><td class="negative">(8.682)</td><td class="negative">(8.230)</td><td class="negative">(8.526)</td><td class="negative">(10.498)</td><td class="negative">(21.787)</td></tr>
+<tr class="dre-item"><td>Serviço de Terceiros</td><td class="negative">(14.342)</td><td class="negative">(14.181)</td><td class="negative">(2.671)</td><td class="negative">(577)</td><td class="negative">(548)</td><td class="negative">(533)</td></tr>
+<tr class="dre-item"><td>Impostos / Taxas</td><td class="negative">(16.647)</td><td class="negative">(14.343)</td><td class="negative">(15.082)</td><td class="negative">(16.559)</td><td class="negative">(3.494)</td><td class="negative">(12.776)</td></tr>
+<tr class="dre-item"><td>Brindes para Colaboradores</td><td class="negative">(41.133)</td><td class="negative">(15.064)</td><td class="negative">(538)</td><td class="negative">(1.004)</td><td class="negative">(671)</td><td class="negative">(1.299)</td></tr>
+<tr class="dre-item"><td>Recrutamento e Seleção</td><td class="negative">(22.525)</td><td class="negative">(6.081)</td><td class="negative">(14.013)</td><td class="negative">(6.009)</td><td class="negative">(6.012)</td><td class="negative">(61.865)</td></tr>
+<tr class="dre-ebitda"><td>EBITDA</td><td style="color:var(--accent);font-weight:700">81.568</td><td style="color:var(--accent);font-weight:700">(520.796)</td><td style="color:var(--accent);font-weight:700">(216.300)</td><td style="color:var(--accent);font-weight:700">(954.003)</td><td style="color:var(--accent);font-weight:700">(818.832)</td><td style="color:var(--accent);font-weight:700">(1.018.367)</td></tr>
+<tr class="dre-mg"><td>Margem EBITDA %</td><td class="pct">2.0%</td><td class="pct">-16.5%</td><td class="pct">-6.4%</td><td class="pct">-35.2%</td><td class="pct">-32.0%</td><td class="pct">-36.4%</td></tr>
+<tr class="dre-item"><td>Outras Receitas/Despesas</td><td class="negative">(7.847)</td><td class="negative">(11.798)</td><td class="negative">(34.913)</td><td class="">1.074</td><td class="negative">(50.371)</td><td class="">103.530</td></tr>
+<tr class="dre-item"><td>Receitas Financeiras</td><td class="">144</td><td class="">2.513</td><td class="">10.600</td><td class="">2.134</td><td class="">1.296</td><td class="">116.975</td></tr>
+<tr class="dre-item"><td>Despesas Financeiras</td><td class="negative">(7.991)</td><td class="negative">(14.311)</td><td class="negative">(45.513)</td><td class="negative">(1.060)</td><td class="negative">(51.667)</td><td class="negative">(13.445)</td></tr>
+<tr class="dre-cat"><td>Resultado Antes de IR/CSLL (EBT)</td><td class="">73.721</td><td class="negative">(532.594)</td><td class="negative">(3.650.989)</td><td class="negative">(801.104)</td><td class="negative">(859.961)</td><td class="negative">(914.836)</td></tr>
+<tr class="dre-item"><td>(-) IR e CSLL</td><td class="negative">(17.693)</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">0</td></tr>
+<tr class="total"><td>Lucro / Perda Líquida</td><td>56.028</td><td>(532.594)</td><td>(3.650.989)</td><td>(801.104)</td><td>(859.961)</td><td>(914.836)</td></tr>
+<tr class="dre-mg"><td>Margem Líquida %</td><td class="pct">1.4%</td><td class="pct">-16.9%</td><td class="pct">-108.4%</td><td class="pct">-29.6%</td><td class="pct">-33.6%</td><td class="pct">-32.7%</td></tr>
+</tbody></table></div>
+<div style="font-size:10.5px;color:var(--ink-3)">Valores em R$. Fonte: aba P&amp;L Gerencial (base consolidada prévia). DRE aberta em todas as linhas.</div></div>
+
+<div id="analise-var" class="section anchor"><div class="section-title"><div class="dot" style="background:var(--amber)"></div>Análise de Variação — Junho vs Maio &amp; vs Budget</div>
+<div class="table-wrap"><table><thead><tr><th>Linha</th><th>Jun/26 Real</th><th>Mai/26 Real</th><th>Δ R$ (M/M)</th><th>Δ % (M/M)</th><th>Budget Jun</th><th>Δ R$ (Real-Bgt)</th><th>Δ % Bgt</th></tr></thead><tbody><tr><td>Receita Bruta</td><td>3.064.952</td><td>2.879.964</td><td class="positive">184.988</td><td class="positive">+6.4%</td><td>3.022.945</td><td class="positive">42.007</td><td class="positive">+1.4%</td></tr><tr><td>Receita Líquida</td><td>2.800.006</td><td>2.559.098</td><td class="positive">240.908</td><td class="positive">+9.4%</td><td>2.750.880</td><td class="positive">49.126</td><td class="positive">+1.8%</td></tr><tr><td>COGS</td><td>(1.852.891)</td><td>(1.465.948)</td><td class="negative">(386.943)</td><td class="negative">+26.4%</td><td>(2.117.946)</td><td class="positive">265.055</td><td class="positive">-12.5%</td></tr><tr><td>EBITDA</td><td>(1.018.367)</td><td>(818.832)</td><td class="negative">(199.535)</td><td class="negative">+24.4%</td><td>(1.064.446)</td><td class="positive">46.079</td><td class="positive">-4.3%</td></tr></tbody></table></div>
+<div style="font-size:10.5px;color:var(--ink-3)">Budget: aba P&L Budget. Para linhas sem budget mapeado (Despesas Op., Lucro Líquido), ver seção Principais Variações acima.</div></div>
+
+<div id="margens" class="section anchor"><div class="section-title"><div class="dot" style="background:var(--green)"></div>Evolução de Margens — 2026</div>
+<div class="chart-wrap"><div class="chart-title">Margem Bruta, EBITDA e Líquida — Jan a Jun 2026 (%)</div>
+<div style="display:flex;gap:20px;justify-content:center;margin-top:10px"><div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-2)"><span style="width:16px;height:3px;background:#059669;border-radius:2px;display:inline-block"></span>Margem Bruta</div><div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-2)"><span style="width:16px;height:3px;background:#5046e5;border-radius:2px;display:inline-block"></span>Margem EBITDA</div><div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-2)"><span style="width:16px;height:3px;background:#3b82f6;border-radius:2px;display:inline-block"></span>Margem Líquida</div></div><svg viewBox="0 0 560 300" style="width:100%;max-width:640px;height:auto;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif"><line x1="46" y1="270.0" x2="486" y2="270.0" stroke="#eef0f5" stroke-width="1"/><text x="38" y="273.0" font-size="9" fill="#9ca3af" text-anchor="end">-137%</text><line x1="46" y1="213.5" x2="486" y2="213.5" stroke="#eef0f5" stroke-width="1"/><text x="38" y="216.5" font-size="9" fill="#9ca3af" text-anchor="end">-83%</text><line x1="46" y1="157.0" x2="486" y2="157.0" stroke="#eef0f5" stroke-width="1"/><text x="38" y="160.0" font-size="9" fill="#9ca3af" text-anchor="end">-29%</text><line x1="46" y1="100.5" x2="486" y2="100.5" stroke="#eef0f5" stroke-width="1"/><text x="38" y="103.5" font-size="9" fill="#9ca3af" text-anchor="end">24%</text><line x1="46" y1="44.0" x2="486" y2="44.0" stroke="#eef0f5" stroke-width="1"/><text x="38" y="47.0" font-size="9" fill="#9ca3af" text-anchor="end">78%</text><line x1="46" y1="126.1" x2="486" y2="126.1" stroke="#c4c9d4" stroke-width="1.5" stroke-dasharray="4 3"/><text x="46.0" y="288" font-size="10" fill="#6b7280" text-anchor="middle">Jan</text><text x="134.0" y="288" font-size="10" fill="#6b7280" text-anchor="middle">Fev</text><text x="222.0" y="288" font-size="10" fill="#6b7280" text-anchor="middle">Mar</text><text x="310.0" y="288" font-size="10" fill="#6b7280" text-anchor="middle">Abr</text><text x="398.0" y="288" font-size="10" fill="#6b7280" text-anchor="middle">Mai</text><text x="486.0" y="288" font-size="10" fill="#6b7280" text-anchor="middle">Jun</text><polyline points="46.0,73.9 134.0,82.0 222.0,76.6 310.0,84.4 398.0,81.2 486.0,90.5" fill="none" stroke="#059669" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="46.0" cy="73.9" r="3.2" fill="#fff" stroke="#059669" stroke-width="2"/><circle cx="134.0" cy="82.0" r="3.2" fill="#fff" stroke="#059669" stroke-width="2"/><circle cx="222.0" cy="76.6" r="3.2" fill="#fff" stroke="#059669" stroke-width="2"/><circle cx="310.0" cy="84.4" r="3.2" fill="#fff" stroke="#059669" stroke-width="2"/><circle cx="398.0" cy="81.2" r="3.2" fill="#fff" stroke="#059669" stroke-width="2"/><circle cx="486.0" cy="90.5" r="3.2" fill="#fff" stroke="#059669" stroke-width="2"/><polyline points="46.0,124.0 134.0,143.4 222.0,132.9 310.0,163.1 398.0,159.7 486.0,164.3" fill="none" stroke="#5046e5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="46.0" cy="124.0" r="3.2" fill="#fff" stroke="#5046e5" stroke-width="2"/><circle cx="134.0" cy="143.4" r="3.2" fill="#fff" stroke="#5046e5" stroke-width="2"/><circle cx="222.0" cy="132.9" r="3.2" fill="#fff" stroke="#5046e5" stroke-width="2"/><circle cx="310.0" cy="163.1" r="3.2" fill="#fff" stroke="#5046e5" stroke-width="2"/><circle cx="398.0" cy="159.7" r="3.2" fill="#fff" stroke="#5046e5" stroke-width="2"/><circle cx="486.0" cy="164.3" r="3.2" fill="#fff" stroke="#5046e5" stroke-width="2"/><polyline points="46.0,124.6 134.0,143.8 222.0,240.1 310.0,157.2 398.0,161.4 486.0,160.5" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="46.0" cy="124.6" r="3.2" fill="#fff" stroke="#3b82f6" stroke-width="2"/><circle cx="134.0" cy="143.8" r="3.2" fill="#fff" stroke="#3b82f6" stroke-width="2"/><circle cx="222.0" cy="240.1" r="3.2" fill="#fff" stroke="#3b82f6" stroke-width="2"/><circle cx="310.0" cy="157.2" r="3.2" fill="#fff" stroke="#3b82f6" stroke-width="2"/><circle cx="398.0" cy="161.4" r="3.2" fill="#fff" stroke="#3b82f6" stroke-width="2"/><circle cx="486.0" cy="160.5" r="3.2" fill="#fff" stroke="#3b82f6" stroke-width="2"/><text x="54.0" y="69.9" font-size="9.5" font-weight="700" fill="#059669" text-anchor="start">49.6</text><text x="54.0" y="120.0" font-size="9.5" font-weight="700" fill="#5046e5" text-anchor="start">2.0</text><text x="54.0" y="136.0" font-size="9.5" font-weight="700" fill="#3b82f6" text-anchor="start">1.4</text><text x="119.0" y="78.0" font-size="9.5" font-weight="700" fill="#059669" text-anchor="middle">41.9</text><text x="149.0" y="139.4" font-size="9.5" font-weight="700" fill="#5046e5" text-anchor="middle">-16.5</text><text x="119.0" y="155.4" font-size="9.5" font-weight="700" fill="#3b82f6" text-anchor="middle">-16.9</text><text x="222.0" y="72.6" font-size="9.5" font-weight="700" fill="#059669" text-anchor="middle">47.1</text><text x="222.0" y="128.9" font-size="9.5" font-weight="700" fill="#5046e5" text-anchor="middle">-6.4</text><text x="222.0" y="236.1" font-size="9.5" font-weight="700" fill="#3b82f6" text-anchor="middle">-108.4</text><text x="295.0" y="80.4" font-size="9.5" font-weight="700" fill="#059669" text-anchor="middle">39.7</text><text x="325.0" y="153.2" font-size="9.5" font-weight="700" fill="#3b82f6" text-anchor="middle">-29.6</text><text x="295.0" y="169.2" font-size="9.5" font-weight="700" fill="#5046e5" text-anchor="middle">-35.2</text><text x="383.0" y="77.2" font-size="9.5" font-weight="700" fill="#059669" text-anchor="middle">42.7</text><text x="413.0" y="155.7" font-size="9.5" font-weight="700" fill="#5046e5" text-anchor="middle">-32.0</text><text x="383.0" y="171.7" font-size="9.5" font-weight="700" fill="#3b82f6" text-anchor="middle">-33.6</text><text x="478.0" y="86.5" font-size="9.5" font-weight="700" fill="#059669" text-anchor="end">33.8</text><text x="478.0" y="156.5" font-size="9.5" font-weight="700" fill="#3b82f6" text-anchor="end">-32.7</text><text x="478.0" y="172.5" font-size="9.5" font-weight="700" fill="#5046e5" text-anchor="end">-36.4</text></svg>
+</div></div>
+
+<div id="rec-vertical" class="section anchor"><div class="section-title"><div class="dot" style="background:var(--green)"></div>Receita por Vertical de Negócio<span class="src-badge">NEKT · ATHENA</span></div>
+<div class="alert info" style="margin-bottom:14px"><div class="alert-icon">ℹ️</div><div>Receita atribuível por produto = <strong>Take Rate + Juros de Parcelamento</strong> (a parcela vinculável ao produto). Antecipação (R$ 64K em jun) e tarifa de saque são tratadas fora da abertura por produto. Classificação por vertical <strong>sem sobreposição</strong> (cada produto em uma vertical), fecha com o total.</div></div>
+<div class="chart-wrap"><div class="chart-title">Distribuição por Vertical — Junho 2026 (Take Rate + Juros)</div><div class="bar-chart"><div class="bar-row"><div class="bar-label">Checkout Only</div><div class="bar-track"><div class="bar-fill" style="width:54%;background:var(--amber)"><span>R$ 1.629 mil</span></div></div><div class="bar-val">54.4%</div></div><div class="bar-row"><div class="bar-label">Área de Membros</div><div class="bar-track"><div class="bar-fill" style="width:24%;background:var(--green)"><span>R$ 714 mil</span></div></div><div class="bar-val">23.8%</div></div><div class="bar-row"><div class="bar-label">Comunidades</div><div class="bar-track"><div class="bar-fill" style="width:21%;background:var(--accent)"><span>R$ 627 mil</span></div></div><div class="bar-val">20.9%</div></div><div class="bar-row"><div class="bar-label">Eventos</div><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--ink-3)"><span>R$ 24 mil</span></div></div><div class="bar-val">0.8%</div></div></div></div>
+<div class="table-wrap"><table><thead><tr><th>Linha</th><th>J/25</th><th>F/25</th><th>M/25</th><th>A/25</th><th>M/25</th><th>J/25</th><th>J/25</th><th>A/25</th><th>S/25</th><th>O/25</th><th>N/25</th><th>D/25</th><th>J/26</th><th>F/26</th><th>M/26</th><th>A/26</th><th>M/26</th><th>J/26</th></tr></thead><tbody><tr><td>Checkout Only</td><td>942</td><td>851</td><td>888</td><td>1.103</td><td>1.119</td><td>1.151</td><td>1.312</td><td>1.705</td><td>1.774</td><td>1.674</td><td>2.113</td><td>1.730</td><td>2.198</td><td>1.913</td><td>1.895</td><td>1.624</td><td>1.384</td><td>1.629</td></tr><tr><td>Comunidades</td><td>496</td><td>553</td><td>647</td><td>651</td><td>578</td><td>710</td><td>636</td><td>668</td><td>691</td><td>821</td><td>871</td><td>892</td><td>1.020</td><td>692</td><td>803</td><td>573</td><td>685</td><td>627</td></tr><tr><td>Área de Membros</td><td>983</td><td>734</td><td>754</td><td>795</td><td>967</td><td>947</td><td>932</td><td>755</td><td>963</td><td>809</td><td>947</td><td>920</td><td>1.004</td><td>725</td><td>838</td><td>767</td><td>734</td><td>714</td></tr><tr><td>Eventos</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>5</td><td>21</td><td>9</td><td>10</td><td>13</td><td>33</td><td>16</td><td>24</td></tr><tr class="subtotal"><td>Total</td><td>2.420</td><td>2.138</td><td>2.289</td><td>2.549</td><td>2.665</td><td>2.808</td><td>2.880</td><td>3.128</td><td>3.429</td><td>3.303</td><td>3.936</td><td>3.563</td><td>4.231</td><td>3.339</td><td>3.550</td><td>2.998</td><td>2.818</td><td>2.994</td></tr></tbody></table></div>
+<div style="font-size:10.5px;color:var(--ink-3)">Valores em R$ mil. Série mensal jan/2025–jun/2026. Fonte: nekt_service.fct_payment × dim_product.</div></div>
+
+<div id="rec-canal" class="section anchor"><div class="section-title"><div class="dot"></div>Receita por Canal<span class="src-badge">NEKT · ATHENA</span></div>
+<div class="alert warning" style="margin-bottom:14px"><div class="alert-icon">⚠️</div><div><strong>Atenção — há sobreposição.</strong> Um mesmo produto pode ter múltiplos canais ativos (ex.: Discord + Área de Membros). Nesta visão, a receita é somada em <em>cada</em> canal que o produto possui, então a soma das linhas é maior que a receita total. Use a visão por Vertical para valores que fecham com o total.</div></div>
+<div class="table-wrap"><table><thead><tr><th>Linha</th><th>J/25</th><th>F/25</th><th>M/25</th><th>A/25</th><th>M/25</th><th>J/25</th><th>J/25</th><th>A/25</th><th>S/25</th><th>O/25</th><th>N/25</th><th>D/25</th><th>J/26</th><th>F/26</th><th>M/26</th><th>A/26</th><th>M/26</th><th>J/26</th></tr></thead><tbody><tr><td>Discord</td><td>379</td><td>274</td><td>219</td><td>173</td><td>276</td><td>196</td><td>178</td><td>221</td><td>163</td><td>178</td><td>195</td><td>143</td><td>197</td><td>166</td><td>168</td><td>149</td><td>167</td><td>101</td></tr><tr><td>WhatsApp</td><td>196</td><td>210</td><td>213</td><td>220</td><td>297</td><td>284</td><td>229</td><td>218</td><td>305</td><td>235</td><td>279</td><td>206</td><td>304</td><td>291</td><td>335</td><td>239</td><td>286</td><td>244</td></tr><tr><td>Telegram</td><td>617</td><td>482</td><td>632</td><td>529</td><td>498</td><td>582</td><td>530</td><td>551</td><td>574</td><td>631</td><td>618</td><td>494</td><td>671</td><td>509</td><td>672</td><td>458</td><td>519</td><td>477</td></tr><tr><td>Área Membros Comunidade</td><td>72</td><td>60</td><td>41</td><td>59</td><td>55</td><td>40</td><td>34</td><td>42</td><td>94</td><td>48</td><td>71</td><td>47</td><td>56</td><td>37</td><td>24</td><td>33</td><td>22</td><td>33</td></tr><tr><td>Área Membros Cursos</td><td>350</td><td>257</td><td>341</td><td>392</td><td>497</td><td>502</td><td>529</td><td>390</td><td>440</td><td>418</td><td>509</td><td>529</td><td>541</td><td>381</td><td>383</td><td>466</td><td>411</td><td>354</td></tr><tr><td>Checkout Only</td><td>942</td><td>851</td><td>888</td><td>1.103</td><td>1.119</td><td>1.151</td><td>1.312</td><td>1.705</td><td>1.774</td><td>1.674</td><td>2.113</td><td>1.730</td><td>2.198</td><td>1.913</td><td>1.895</td><td>1.624</td><td>1.384</td><td>1.629</td></tr><tr><td>Instagram Private</td><td>26</td><td>29</td><td>33</td><td>94</td><td>36</td><td>34</td><td>37</td><td>33</td><td>28</td><td>28</td><td>39</td><td>22</td><td>20</td><td>19</td><td>24</td><td>21</td><td>18</td><td>15</td></tr><tr><td>Instagram Close Friends</td><td>83</td><td>78</td><td>82</td><td>82</td><td>92</td><td>173</td><td>162</td><td>135</td><td>253</td><td>270</td><td>250</td><td>491</td><td>406</td><td>151</td><td>225</td><td>123</td><td>137</td><td>234</td></tr><tr><td>Eventos</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>5</td><td>21</td><td>9</td><td>10</td><td>13</td><td>33</td><td>16</td><td>24</td></tr><tr class="subtotal"><td>Total</td><td>2.665</td><td>2.241</td><td>2.447</td><td>2.654</td><td>2.870</td><td>2.961</td><td>3.012</td><td>3.294</td><td>3.633</td><td>3.481</td><td>4.079</td><td>3.683</td><td>4.400</td><td>3.477</td><td>3.739</td><td>3.146</td><td>2.960</td><td>3.111</td></tr></tbody></table></div>
+<div style="font-size:10.5px;color:var(--ink-3)">Valores em R$ mil. "Total" = receita real do mês (sem duplicação); a soma das linhas de canal excede o total pela sobreposição.</div></div>
+
+<div id="rec-produto" class="section anchor"><div class="section-title"><div class="dot"></div>Receita por Produto<span class="src-badge">NEKT · ATHENA</span></div>
+<div class="table-wrap"><table><thead><tr><th>Linha</th><th>J/25</th><th>F/25</th><th>M/25</th><th>A/25</th><th>M/25</th><th>J/25</th><th>J/25</th><th>A/25</th><th>S/25</th><th>O/25</th><th>N/25</th><th>D/25</th><th>J/26</th><th>F/26</th><th>M/26</th><th>A/26</th><th>M/26</th><th>J/26</th></tr></thead><tbody><tr><td>Checkout Only</td><td>942</td><td>851</td><td>888</td><td>1.103</td><td>1.119</td><td>1.151</td><td>1.312</td><td>1.705</td><td>1.774</td><td>1.674</td><td>2.113</td><td>1.730</td><td>2.198</td><td>1.913</td><td>1.895</td><td>1.624</td><td>1.384</td><td>1.629</td></tr><tr><td>Telegram</td><td>397</td><td>416</td><td>504</td><td>467</td><td>357</td><td>475</td><td>463</td><td>435</td><td>420</td><td>484</td><td>509</td><td>414</td><td>553</td><td>412</td><td>536</td><td>359</td><td>420</td><td>392</td></tr><tr><td>Área de Membros: Cursos</td><td>350</td><td>257</td><td>341</td><td>392</td><td>497</td><td>502</td><td>529</td><td>390</td><td>440</td><td>418</td><td>509</td><td>529</td><td>541</td><td>381</td><td>383</td><td>466</td><td>411</td><td>354</td></tr><tr><td>Discord</td><td>379</td><td>274</td><td>219</td><td>173</td><td>276</td><td>196</td><td>178</td><td>221</td><td>163</td><td>178</td><td>195</td><td>143</td><td>197</td><td>166</td><td>168</td><td>149</td><td>167</td><td>101</td></tr><tr><td>WhatsApp</td><td>171</td><td>174</td><td>182</td><td>179</td><td>233</td><td>237</td><td>165</td><td>166</td><td>255</td><td>204</td><td>244</td><td>166</td><td>252</td><td>250</td><td>282</td><td>189</td><td>244</td><td>212</td></tr><tr><td>Instagram Close Friends</td><td>83</td><td>78</td><td>82</td><td>82</td><td>92</td><td>173</td><td>162</td><td>135</td><td>253</td><td>270</td><td>250</td><td>491</td><td>406</td><td>151</td><td>225</td><td>123</td><td>137</td><td>234</td></tr><tr><td>Área de Membros: Comunidade</td><td>72</td><td>60</td><td>41</td><td>59</td><td>55</td><td>40</td><td>34</td><td>42</td><td>94</td><td>48</td><td>71</td><td>47</td><td>56</td><td>37</td><td>24</td><td>33</td><td>22</td><td>33</td></tr><tr><td>Instagram Private</td><td>26</td><td>29</td><td>33</td><td>94</td><td>36</td><td>34</td><td>37</td><td>33</td><td>28</td><td>28</td><td>39</td><td>22</td><td>20</td><td>19</td><td>24</td><td>21</td><td>18</td><td>15</td></tr><tr><td>Eventos</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>5</td><td>21</td><td>9</td><td>10</td><td>13</td><td>33</td><td>16</td><td>24</td></tr><tr class="subtotal"><td>Total</td><td>2.420</td><td>2.138</td><td>2.289</td><td>2.549</td><td>2.665</td><td>2.808</td><td>2.880</td><td>3.128</td><td>3.429</td><td>3.303</td><td>3.936</td><td>3.563</td><td>4.231</td><td>3.339</td><td>3.550</td><td>2.998</td><td>2.818</td><td>2.994</td></tr></tbody></table></div>
+<div style="font-size:10.5px;color:var(--ink-3)">Valores em R$ mil. Classificação por produto principal (sem sobreposição, via prioridade de canal). Fecha com o total.</div></div>
+
+<div id="pessoas" class="section anchor"><div class="section-title"><div class="dot" style="background:var(--amber)"></div>Pessoal &amp; Headcount</div>
+<div class="kpi-grid">
+<div class="kpi-card"><div class="kpi-label">Headcount (Jun)</div><div class="kpi-value">74</div><div class="kpi-sub">Budget: 74</div></div>
+<div class="kpi-card amber"><div class="kpi-label">Custo Pessoal (Jun)</div><div class="kpi-value">R$ 1,12M</div><div class="kpi-sub">FOPAG total</div></div>
+<div class="kpi-card green"><div class="kpi-label">Receita/Colaborador</div><div class="kpi-value">R$ 41,4K</div><div class="kpi-sub">Rec. Bruta ÷ 74</div></div>
+<div class="kpi-card"><div class="kpi-label">Produtores Ativos</div><div class="kpi-value">5.374</div><div class="kpi-sub">MAU · Novos: 188</div></div>
+</div></div>
+
+<div id="historico" class="section anchor"><div class="section-title"><div class="dot"></div>Evolução Histórica 2025–2026</div>
+<div class="table-wrap"><table><thead><tr><th>Período</th><th>GMV</th><th>Receita Bruta</th><th>EBITDA</th><th>Caixa Final</th></tr></thead><tbody>
+<tr ><td>Jan/25</td><td>21.557.400</td><td>2.460.157</td><td>351.931</td><td>1.229.807</td></tr><tr ><td>Fev/25</td><td>19.200.154</td><td>2.209.921</td><td>(66.635)</td><td>1.196.717</td></tr><tr ><td>Mar/25</td><td>19.877.321</td><td>2.357.676</td><td>46.181</td><td>1.140.621</td></tr><tr ><td>Abr/25</td><td>23.487.074</td><td>2.650.932</td><td>482.746</td><td>1.539.278</td></tr><tr ><td>Mai/25</td><td>23.848.639</td><td>2.848.353</td><td>342.187</td><td>1.509.533</td></tr><tr ><td>Jun/25</td><td>25.451.575</td><td>2.924.697</td><td>212.734</td><td>1.508.039</td></tr><tr ><td>Jul/25</td><td>26.318.622</td><td>2.972.617</td><td>1.163</td><td>1.279.536</td></tr><tr ><td>Ago/25</td><td>28.254.155</td><td>3.217.339</td><td>439.677</td><td>1.103.749</td></tr><tr ><td>Set/25</td><td>30.826.539</td><td>3.500.585</td><td>(95.751)</td><td>1.031.480</td></tr><tr ><td>Out/25</td><td>29.611.050</td><td>3.340.672</td><td>(423.448)</td><td>363.727</td></tr><tr ><td>Nov/25</td><td>33.387.402</td><td>3.923.461</td><td>115.710</td><td>377.033</td></tr><tr ><td>Dez/25</td><td>31.741.466</td><td>3.670.948</td><td>(1.025.458)</td><td>4.875.311</td></tr><tr style=background:var(--accent-light)><td>Jan/26</td><td>37.788.579</td><td>4.377.046</td><td>81.568</td><td>4.437.508</td></tr><tr style=background:var(--accent-light)><td>Fev/26</td><td>31.813.514</td><td>3.485.068</td><td>(520.796)</td><td>3.666.304</td></tr><tr style=background:var(--accent-light)><td>Mar/26</td><td>34.245.304</td><td>3.720.277</td><td>(216.300)</td><td>12.292.420</td></tr><tr style=background:var(--accent-light)><td>Abr/26</td><td>30.053.811</td><td>3.068.226</td><td>(954.003)</td><td>11.288.357</td></tr><tr style=background:var(--accent-light)><td>Mai/26</td><td>29.033.840</td><td>2.879.964</td><td>(818.832)</td><td>12.979.894</td></tr><tr style=background:var(--accent-light)><td>Jun/26</td><td>30.554.353</td><td>3.064.952</td><td>(1.018.367)</td><td>14.429.877</td></tr>
+</tbody></table></div></div>
+
+<div id="comentarios" class="section anchor"><div class="section-title"><div class="dot" style="background:var(--accent)"></div>Comentários Gerenciais — Junho 2026</div>
+<div class="comment-card"><div class="comment-header"><div class="comment-icon">📊</div><div class="comment-title">Receita cresce, mas EBITDA se aprofunda no negativo</div></div>
+<div class="comment-body">A receita bruta subiu 6,4% vs maio (R$ 2,88M → R$ 3,06M) e superou o budget em R$ 42K. Apesar disso, o EBITDA ficou em -R$ 1,02M, o pior resultado de 2026. O motivo não é receita, e sim custos: o COGS saltou para -R$ 1,85M (de -R$ 1,47M em maio), puxado pelo custo de antecipação de recebíveis (R$ 818K).</div></div>
+<div class="comment-card"><div class="comment-header"><div class="comment-icon">🔧</div><div class="comment-title">Reembolsos: issue ENG-2432</div></div>
+<div class="comment-body">Os reembolsos subiram R$ 85K vs maio, ligados à issue ENG-2432 — valores a mais no arredondamento no processo de antecipação de recebíveis, atualmente em tratamento pela engenharia.</div></div>
+<div class="comment-card"><div class="comment-header"><div class="comment-icon">💰</div><div class="comment-title">Caixa reforçado por aporte</div></div>
+<div class="comment-body">O caixa encerrou junho em R$ 14,4M (runway de 24 meses), muito acima da posição apertada do início do ano. A recomposição veio do aporte de capital de R$ 10,6M em maio e da recuperação parcial das movimentações do incidente de 20/03 (ressarcimento líquido de saques manuais). A geração de caixa operacional segue negativa (breakeven de -R$ 626K em maio), então o burn operacional continua sendo o ponto de atenção.</div></div>
+<div class="comment-card"><div class="comment-header"><div class="comment-icon">🧩</div><div class="comment-title">Mix de receita: Checkout domina, Comunidades resiliente</div></div>
+<div class="comment-body">Pela abertura do Nekt, o Checkout Only responde por 54,4% da receita atribuível de junho (R$ 1,63M), seguido de Área de Membros (23,8%) e Comunidades (20,9%). Eventos ainda é marginal (0,8%) mas cresceu de forma consistente desde out/25. Dentro de Comunidades, Telegram é o maior canal individual (R$ 392K), à frente de WhatsApp (R$ 212K) e Discord (R$ 101K).</div></div>
+</div>
+</main>
+<script>
+document.querySelectorAll('.nav-item').forEach(a=>a.addEventListener('click',function(e){e.preventDefault();document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));this.classList.add('active');const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});}));
+</script>
+</body></html>
